@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+ <mapper namespace="com.yedam.app.board.mapper.BoardDAO">
+ 	<resultMap type="board" id="boardMap">
+ 		<!-- property=java명 column=db에서 컬럼명  pk는 id란에. 나머지는 result-->
+ 		<id property="board_no" column="NO" />
+ 		<result property="poster" column="POSTER" />
+ 		<result property="subject" column="SUBJECT" />
+ 		<result property="contents" column="CONTENTS" />
+ 		<result property="lastpost" column="LASTPOST" />
+ 		<result property="views" column="VIEWS" />
+ 		<result property="filename" column="FILENAME" />
+ 	</resultMap>
+ 	
+ 	
+ 	<!-- 두 테이블 조인 시   vo에 두테이블컬럼들 다 생성 안하고도 map으로 가능-->
+ 	<select id="selectMap" resultType="map">
+		SELECT  NO			as "no",
+				POSTER		as "subject",
+				SUBJECT		as "contents",
+				CONTENTS	as "contents",
+				LASTPOST	as "lastpost",
+				VIEWS		as "views",
+				FILENAME,
+				GENDER,
+				ROLE
+		FROM BOARD, USERS
+		WHERE BOARD.POSTER = USERS.ID
+		ORDER BY NO
+ 	</select>
+ 	
+ 	
+ 	
+ 	<select id="selectCnt" resultType="int">
+ 		SELECT COUNT(*) FROM BOARD
+ 	</select>
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	<!-- 전체조회 -->
+							<!-- resultType   parameterType은 생략가능-->
+							<!-- resultMap은 위의 resultMap에서 id명 적어줌 -->
+	<select id="selectAll" resultType="board" parameterType="board"> <!-- sql-mep-config파일에 typeAlias설정해놨음 -->
+	SELECT A.* FROM (SELECT ROWNUM RN, B.* FROM(
+		SELECT  NO			board_no,
+				POSTER,
+				SUBJECT,
+				CONTENTS,
+				LASTPOST,
+				VIEWS,
+				FILENAME
+		FROM BOARD
+		<where>
+			<if test="poster != null and poster != ''">
+			POSTER LIKE '%' || #{poster} || '%'
+			</if>
+			<if test="subject != null and subject != ''">
+			AND SUBJECT LIKE '%' || #{subject} || '%'
+			</if>
+		</where>
+		ORDER BY no DESC
+	) B ) A WHERE RN BETWEEN #{first} and #{last}
+	</select>
+	
+	
+	
+	
+<!-- 	<select id="selectAll" resultType="board" parameterType="board"> sql-mep-config파일에 typeAlias설정해놨음
+		SELECT  NO			board_no,
+				POSTER,
+				SUBJECT,
+				CONTENTS,
+				LASTPOST,
+				VIEWS,
+				FILENAME
+		FROM BOARD
+		<where>
+			<if test="poster != null and poster != ''">
+			POSTER LIKE '%' || #{poster} || '%'
+			</if>
+			<if test="subject != null and subject != ''">
+			AND SUBJECT LIKE '%' || #{subject} || '%'
+			</if>
+		</where>
+		ORDER BY no DESC
+	</select>
+	 -->
+	
+	
+	
+	
+	<!-- 게시글 등록 -->
+	<insert id="insert">
+		<selectKey keyProperty="no" resultType="integer" order="BEFORE"> <!-- java.lang.String 과 같음 -->
+			SELECT NVL(MAX(NO),0) + 1 FROM BOARD
+		</selectKey>
+		INSERT INTO BOARD 	(NO,
+							POSTER,
+							SUBJECT,
+							CONTENTS,
+							LASTPOST,
+							VIEWS
+							<if test="filename != null and filename != ''">
+								,FILENAME
+							</if>
+							)
+					VALUES	(#{no},
+							#{poster},
+							#{subject},
+							#{contents},
+							sysdate,
+							0
+							<if test="filename != null and filename != ''">
+								, #{filename}
+							</if>
+							)
+	</insert>
+	
+	
+	<delete id="deleteAll" parameterType="board">
+		DELETE FROM BOARD
+		WHERE NO IN 
+			<foreach collection="nos" item="i" open="(" close=")" separator=",">
+				<!-- c:foreach에서 item , var 에서 var가 item -->
+				#{i}
+			</foreach>
+	</delete>
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+<!--  <bean name="" class="" /> -->
+	<context:component-scan base-package="com.yedam.app" />
+	<!--  <bean name="sony" 
+		  class="com.yedam.app.ioc.SonySpeaker" 
+		  scope="singleton" />-->
+<!-- 	<bean name="apple" class="com.yedam.app.ioc.AppleSpeaker"/>
+	<bean name="sony" class="com.yedam.app.ioc.SonySpeaker"/>
+	<bean name="tv" class="com.yedam.app.ioc.LgTV">
+		<property name="speaker" ref="sony"></property> name은 samsungtv에 스피커이름 , ref는 여기서 빈에 스피커 name / set메소드 있어야함
+	</bean> -->
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	
+<!-- 0921 수업 
+	<bean id="logAdvice" class="com.yedam.app.aop.LogAdvice"></bean>
+	<bean id="afterAdvice" class="com.yedam.app.aop.AfterReturningAdvice"></bean>
+	<aop:config>
+		<aop:pointcut expression="execution(* com.yedam.app..*.*(..))" id="allpointcut" />
+		<aop:pointcut expression="execution(* com.yedam.app..*.select*(..))" id="selectPointcut" />
+		<aop:aspect ref="logAdvice">
+			<aop:before method="printLog" pointcut-ref="allpointcut" />
+		</aop:aspect>
+		<aop:aspect ref="afterAdvice">
+			<aop:after-returning method="afterLog" pointcut-ref="selectPointcut" returning="returnObj" />
+		</aop:aspect>
+	</aop:config>
+-->	
+
+</beans>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+  
+	
+<mapper namespace="com.yedam.app.member.mapper.MemberDAO">
+	<select id="selectAll" resultType="member"> <!-- sql-mep-config파일에 typeAlias설정해놨음 -->
+		SELECT  *
+		FROM MEMBER
+		ORDER BY ID
+	</select>
+	
+	<insert id="insert" parameterType="member">
+		insert into member(id,
+							pw,
+							job,
+							reason,
+							gender,
+							mailyn,
+							hobby,
+							regdate)
+		 			values (#{id},
+		 					#{pw},
+		 					#{job},
+		 					#{reason},
+		 					#{gender},
+		 					#{mailyn},
+		 					#{hobby},
+		 					sysdate)
+	</insert>
+	
+	
+	<update id="update" parameterType="member">
+		UPDATE MEMBER SET 	pw = #{pw},
+							job = #{job},
+							reason = #{reason},
+							gender = #{gender},
+							mailyn = #{mailyn},
+							hobby = #{hobby}
+		WHERE ID = #{id}
+							
+	
+	</update>
+	
+	
+	<delete id="delete" parameterType="member">
+		DELETE MEMBER WHERE ID = #{id}
+	</delete>
+	
+	
+	
+<!--  <mapper namespace="memberDAO"> -->
+<!-- 	<select id="selectAll" resultType="member"> sql-mep-config파일에 typeAlias설정해놨음
+		SELECT  *
+		FROM MEMBER
+		ORDER BY ID
+	</select> -->
+
+	
+	<select id="selectOne" resultType="member" parameterType="member">
+		SELECT *
+		FROM MEMBER
+		wHERE ID = #{id}
+	</select>
+	
+
+</mapper>

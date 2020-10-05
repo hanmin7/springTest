@@ -36,4 +36,10 @@ public class HomeController {
 		return "home";
 	}
 	
+	@RequestMapping("/report.do")
+	public String report(Model model) {
+		model.addAttribute("filename", "/reports/emp_master.jrxml");
+		return "pdfView";
+	}
+	
 }

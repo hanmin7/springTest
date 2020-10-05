@@ -56,7 +56,7 @@ public class MemberController {
 		//회원조회
 		model.addAttribute("list", memberService.selectAll());
 		
-		return "/member/memberAll";
+		return "member/memberAll";
 		
 	}
 	
